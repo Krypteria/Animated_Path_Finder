@@ -27,8 +27,12 @@ public class Controller {
 		this.pathfinder.start();
 	}
 	
-	public void reset() {
-		this.pathfinder.reset();
+	public void start2() {
+		//this.pathfinder.start2();
+	}
+	
+	public void reset(int w) {
+		this.pathfinder.reset(w);
 	}
 	
 	public void addObserver(canvasObserver co) {

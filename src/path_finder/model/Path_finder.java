@@ -4,8 +4,8 @@ import path_finder.misc.tCoord;
 
 public class Path_finder {
 
-	private static final int height = 45;
-	private static final int width = 45;
+	private static final int height = 40;
+	private static final int width = 40;
 	
 	private static final String START = "StartPoint";
 	private static final String END = "EndPoint";
@@ -81,8 +81,20 @@ public class Path_finder {
 		}
 	}
 	
-	public void reset() {
-		this.initializeMatrix();
+	/*public void start2() {
+		if(this.startPoint.getX() != -1 && this.endPoint.getX() != -1) {
+			search.addValues(this.startPoint, this.endPoint, this.matrix, Path_finder.height, Path_finder.width);
+			//search.Dijkstra();			
+		}
+		else {
+			System.out.println("Define los puntos de comienzo y final");
+		}
+	}*/
+	
+	public void reset(int w) {
+		if(w == 1) { 
+			this.initializeMatrix();			
+		}
 		this.search.reset();
 	}
 }

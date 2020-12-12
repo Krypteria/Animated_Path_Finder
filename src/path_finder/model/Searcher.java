@@ -3,8 +3,10 @@ package path_finder.model;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
+import path_finder.misc.Pair;
 import path_finder.misc.tCoord;
 
 public class Searcher {
@@ -17,8 +19,11 @@ public class Searcher {
 	
 	private int [][] matrix;
 	
+	private static final int LIMIT = 100000000;
+	//private static final int COSTE = 1;
 	
 	private Queue<tCoord> q;
+	//private Queue<Pair<Integer, tCoord>> q2;
 	private int [][] dist;
 	private boolean [][] visited;
 	private tCoord[][] trackNodes;
@@ -57,6 +62,15 @@ public class Searcher {
 			}
 		}
 	}
+	
+	/*private void initializeMatrixD() {
+		for(int i = 0; i < this.height; i++) {
+			for(int j = 0; j < this.width; j++){
+				this.dist[i][j] = LIMIT;
+				this.visited[i][j] = false;
+			}
+		}
+	}*/
 	
 	void bfs(){ 
 		
@@ -109,10 +123,65 @@ public class Searcher {
 		setupObserverUpdate();
 	}
 	
+	/*void Dijkstra() {
+		System.out.println("Me ejecuto");
+		reset();
+		initializeMatrixD();
+		this.dist[this.startPoint.getX()][this.startPoint.getY()] = 0;
+		this.visited[this.startPoint.getX()][this.startPoint.getY()] = true;
+		this.q2 = new PriorityQueue<Pair<Integer, tCoord>>();
+		
+		q2.add(new Pair<Integer, tCoord>(0, this.startPoint));
+		
+		while(!q2.isEmpty() && !founded) {
+			Pair<Integer, tCoord> front = q2.peek();  q2.poll();
+			
+			if(front.getSecond() != this.startPoint) {
+				this.visitedNodes.add(front.getSecond());
+			}
+			
+			tCoord nodo = front.getSecond();  int coste = front.getFirst();
+			
+			if(coste > dist[nodo.getX()][nodo.getY()]) {
+				continue;
+			}
+			
+			for(int i = 0; i < 8; i++) {
+				int nX = nodo.getX() + dF[i];
+				int nY = nodo.getY() + dC[i];
+				
+				if(isOk(nX, nY) && !visited[nX][nY] && matrix[nX][nY] != 1) {
+					
+					if(dist[nodo.getX()][nodo.getY()] + COSTE < dist[nX][nY]) {
+						dist[nX][nY] = dist[nodo.getX()][nodo.getY()] + COSTE;
+						q2.add(new Pair<Integer, tCoord>(dist[nX][nY], new tCoord(nX, nY)));
+						visited[nX][nY] = true;
+						this.trackNodes[nX][nY] = nodo;
+						
+						if(this.endPoint.getX() == nX && this.endPoint.getY() == nY) {
+							this.founded = true;
+							break;
+						}
+					}
+				}
+			}
+		}
+		
+		if(founded) {
+			System.out.println("Encontrado");
+		}
+		else {
+			System.out.println("NO encontrado");
+		}
+		
+		setupObserverUpdate();
+	}
+	*/
+	
 	private void setupObserverUpdate() {
 		this.solutionPath = new ArrayList<tCoord>();
 		obtainSolutionPath(solutionPath, trackNodes[this.endPoint.getX()][this.endPoint.getY()], trackNodes);
-		
+		System.out.println(this.solutionPath.size());
 		this.observer.updateSolution(visitedNodes, solutionPath);
 	}
 	

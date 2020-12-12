@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -26,8 +27,8 @@ import path_finder.model.canvasObserver;
 public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 
 	private static final int lineThickness = 20;
-	private static final int height = 45;
-	private static final int width = 45;
+	private static final int height = 40;
+	private static final int width = 40;
 	
 	private static final int BLANK = 1;
 	private static final int WALL = 2;
@@ -66,7 +67,7 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 	
 	//solution painting
 	
-	private final static int DELAY = 35;
+	private int delay;
 	private int solutionGraphicCount = 0;
 	
 	private final Color lineColor = Color.black;
@@ -250,7 +251,7 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 	public void updateSolution(List<tCoord> visitedNodes, List<tCoord> solutionPath) { 
 		this.visitedNodes = visitedNodes;
 		this.solutionNodes = solutionPath;
-		this.timer = new Timer(DELAY, this);
+		this.timer = new Timer(this.delay, this);
 		this.timer.start();
 	}
 	
@@ -319,8 +320,10 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 		}
 	}
 	
-	public void reset() {
-		this.filledList.clear();
+	public void reset(int w) {
+		if(w != 0) {
+			this.filledList.clear();			
+		}
 		this.visitedPattern.clear();
 		this.visitedNodes.clear();
 		this.solutionPath.clear();
@@ -329,5 +332,9 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 		this.solutionGraphicCount = 0;
 		this.paintSolution = false;
 		repaint();
+	}
+	
+	public void setDelay(int delay) {
+		this.delay = delay;
 	}
 }
