@@ -97,10 +97,6 @@ public class MainWindow extends JFrame{
 		sep1.setBackground(Color.black);
 		sep1.setPreferredSize(new Dimension(5,30));
 		
-		JSeparator sep2 = new JSeparator(SwingConstants.VERTICAL);
-		sep2.setBackground(Color.black);
-		sep2.setPreferredSize(new Dimension(5,30));
-		
 		JPanel optionPanel = new JPanel();
 		optionPanel.setLayout(new FlowLayout());
 		
@@ -115,7 +111,6 @@ public class MainWindow extends JFrame{
 		optionPanel.add(sep1);
 		optionPanel.add(this.reset);
 		optionPanel.add(this.maintainWalls);
-		optionPanel.add(sep2);
 		
 		addSpace();
 		

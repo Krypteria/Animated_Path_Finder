@@ -330,7 +330,8 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 		this.last = null;
 		this.solutionGraphicCount = 0;
 		this.paintSolution = false;
-		this.timer.stop();
+		if(this.timer != null)
+			this.timer.stop();
 		
 		repaint();
 	}

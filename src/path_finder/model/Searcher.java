@@ -210,11 +210,14 @@ public class Searcher {
 
 	public void reset() {
 		initializeMatrixs();
-		this.visitedNodes.clear();
-		this.solutionPath.clear();
+		if(this.visitedNodes != null)
+			this.visitedNodes.clear();
+		if(this.solutionPath != null)
+			this.solutionPath.clear();
+		if(this.q != null)
+			this.q.clear();
+
 		this.trackNodes = new tCoord [height][width];
-		this.q.clear();
-		
 		this.founded = false;		
 	}
 }
