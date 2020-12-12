@@ -7,7 +7,6 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -321,9 +320,9 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 	}
 	
 	public void reset(int w) {
-		if(w != 0) {
-			this.filledList.clear();			
-		}
+		if(w != 0) 
+			this.filledList.clear();	
+		
 		this.visitedPattern.clear();
 		this.visitedNodes.clear();
 		this.solutionPath.clear();
@@ -331,6 +330,8 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 		this.last = null;
 		this.solutionGraphicCount = 0;
 		this.paintSolution = false;
+		this.timer.stop();
+		
 		repaint();
 	}
 	

@@ -70,10 +70,9 @@ public class Path_finder {
 		return this.endPoint.getX() == i && this.endPoint.getY() == j;
 	}
 	
-	//start va a pasar a varios botones
-	public void start() {
+	public void start(int d) {
 		if(this.startPoint.getX() != -1 && this.endPoint.getX() != -1) {
-			search.addValues(this.startPoint, this.endPoint, this.matrix, Path_finder.height, Path_finder.width);
+			search.addValues(this.startPoint, this.endPoint, this.matrix, Path_finder.height, Path_finder.width, d);
 			search.bfs();			
 		}
 		else {

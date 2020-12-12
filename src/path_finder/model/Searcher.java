@@ -19,7 +19,7 @@ public class Searcher {
 	
 	private int [][] matrix;
 	
-	private static final int LIMIT = 100000000;
+	//private static final int LIMIT = 100000000;
 	//private static final int COSTE = 1;
 	
 	private Queue<tCoord> q;
@@ -31,6 +31,7 @@ public class Searcher {
 	private List<tCoord> visitedNodes;
 	private List<tCoord> solutionPath;
 	
+	private int nNodes;
 	private boolean founded;
 	
 	private int dF[] = {1,  0, -1,  0,  1,  1, -1, -1};
@@ -38,12 +39,18 @@ public class Searcher {
 	
 	private canvasObserver observer;
 	
-	public void addValues(tCoord s, tCoord e, int [][] m, int h, int w) {
+	public void addValues(tCoord s, tCoord e, int [][] m, int h, int w, int d) {
 		this.startPoint = s;
 		this.endPoint = e;
 		this.matrix = m;
 		this.height = h;
 		this.width = w;
+		if(d == 1) {
+			this.nNodes = 8;
+		}
+		else {
+			this.nNodes = 4;
+		}
 	}
 	
 	public void addObserver(canvasObserver co) {
@@ -74,7 +81,7 @@ public class Searcher {
 	
 	void bfs(){ 
 		
-		reset();
+		initializeParameters();
 		initializeMatrixs();		
 		
 		dist[this.startPoint.getX()][this.startPoint.getY()] = 0;
@@ -91,7 +98,7 @@ public class Searcher {
 			
 			q.poll();
 			
-			for(int i = 0; i < 8; i++) {
+			for(int i = 0; i < this.nNodes; i++) {
 				
 				int nX = front.getX() + dF[i];
 				int nY = front.getY() + dC[i];
@@ -178,6 +185,15 @@ public class Searcher {
 	}
 	*/
 	
+	private void initializeParameters() {
+		this.dist = new int [height][width];
+		this.visited = new boolean [height][width];
+		this.visitedNodes = new ArrayList<tCoord>();
+		this.trackNodes = new tCoord [height][width];
+		this.q = new LinkedList<>();
+		this.founded = false;
+	}
+	
 	private void setupObserverUpdate() {
 		this.solutionPath = new ArrayList<tCoord>();
 		obtainSolutionPath(solutionPath, trackNodes[this.endPoint.getX()][this.endPoint.getY()], trackNodes);
@@ -186,18 +202,19 @@ public class Searcher {
 	}
 	
 	private void obtainSolutionPath(List<tCoord> solutionPath, tCoord s, tCoord trackNodes [][]) {
-		if(!s.equals(this.startPoint)) {
+		if(founded && !s.equals(this.startPoint)) {
 			obtainSolutionPath(solutionPath, trackNodes[s.getX()][s.getY()], trackNodes);
 			solutionPath.add(s);
 		}
 	}
-		
+
 	public void reset() {
-		this.dist = new int [height][width];
-		this.visited = new boolean [height][width];
-		this.visitedNodes = new ArrayList<tCoord>();
+		initializeMatrixs();
+		this.visitedNodes.clear();
+		this.solutionPath.clear();
 		this.trackNodes = new tCoord [height][width];
-		this.q = new LinkedList<>();
-		this.founded = false;
+		this.q.clear();
+		
+		this.founded = false;		
 	}
 }

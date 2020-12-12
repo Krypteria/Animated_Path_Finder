@@ -33,9 +33,12 @@ public class MainWindow extends JFrame{
 	private JSpinner delay;
 	
 	private JCheckBox maintainWalls;
+	private JCheckBox diagonals;
 	
 	private static final int RESET = 1;
 	private static final int NO_RESET = 0;
+	private static final int DIAGONALS = 1;
+	private static final int NO_DIAGONALS = 0;
 	
 	private static final int frameHeight = 850;
 	private static final int frameWidth = 900;
@@ -54,6 +57,7 @@ public class MainWindow extends JFrame{
 		this.delayInfo = new JLabel("(Supported values: 0 - 100)");
 		
 		this.maintainWalls = new JCheckBox("Maintain walls");
+		this.diagonals = new JCheckBox("Diagonals");
 		
 		this.delay = new JSpinner(new SpinnerNumberModel(1,0,101,1));
 		
@@ -62,8 +66,13 @@ public class MainWindow extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ctrl.start();
 				canvas.setDelay((int)delay.getValue());
+				if(diagonals.isSelected()) {
+					ctrl.start(DIAGONALS);					
+				}
+				else {
+					ctrl.start(NO_DIAGONALS);
+				}
 			}
 		});
 
@@ -97,6 +106,7 @@ public class MainWindow extends JFrame{
 		
 		
 		optionPanel.add(this.solve);
+		optionPanel.add(this.diagonals);
 		optionPanel.add(Box.createRigidArea(new Dimension(5,5)));
 		optionPanel.add(this.delayLabel);
 		optionPanel.add(this.delay);

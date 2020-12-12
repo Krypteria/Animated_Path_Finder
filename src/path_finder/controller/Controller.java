@@ -23,8 +23,8 @@ public class Controller {
 		this.pathfinder.addPoint(i, j, point_type);
 	}
 	
-	public void start() {
-		this.pathfinder.start();
+	public void start(int d) {
+		this.pathfinder.start(d);
 	}
 	
 	public void start2() {
