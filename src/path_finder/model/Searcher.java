@@ -197,6 +197,7 @@ public class Searcher {
 	private void setupObserverUpdate() {
 		this.solutionPath = new ArrayList<tCoord>();
 		obtainSolutionPath(solutionPath, trackNodes[this.endPoint.getX()][this.endPoint.getY()], trackNodes);
+		
 		System.out.println(this.solutionPath.size());
 		this.observer.updateSolution(visitedNodes, solutionPath);
 	}

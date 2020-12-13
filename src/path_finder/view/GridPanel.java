@@ -17,6 +17,7 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
@@ -305,7 +306,7 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 					updateMatrixModel(r, IMPORTANT_POINT);
 				}
 				else {
-					System.out.println("No puedes poner el punto en un muro");
+					JOptionPane.showMessageDialog(null, "The start point and the end point cannot be walls", "Error",JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		}
@@ -320,7 +321,7 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 					updateMatrixModel(r, IMPORTANT_POINT);
 				}
 				else {
-					System.out.println("No puedes poner el punto en un muro");
+					JOptionPane.showMessageDialog(null, "The start point and the end point cannot be walls", "Error",JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		}
@@ -333,12 +334,12 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		if(!paintSolution) {			
+		if(!paintSolution) {	
 			if(solutionGraphicCount < this.visitedNodes.size()) {
 				int x = this.visitedNodes.get(solutionGraphicCount).getX(); 
 				int y = this.visitedNodes.get(solutionGraphicCount).getY();
 				
-				if(mapRect.get(x).get(y) != this.endPoint) {
+				if(mapRect.get(y).get(x) != this.endPoint) {
 					this.visitedPattern.add(mapRect.get(y).get(x));
 					solutionGraphicCount++;
 					repaint();
@@ -354,7 +355,7 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 				int x = this.solutionNodes.get(solutionGraphicCount).getX(); 
 				int y = this.solutionNodes.get(solutionGraphicCount).getY();
 				
-				if(mapRect.get(x).get(y) != this.endPoint) {
+				if(mapRect.get(y).get(x) != this.endPoint) {
 					this.solutionPath.add(mapRect.get(y).get(x));
 					solutionGraphicCount++;
 					repaint();
@@ -390,6 +391,8 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 			this.ctrl.addWall(coord.getY(), coord.getX());						
 		}
 		else if(mode == IMPORTANT_POINT)
+			
+			
 			if(r.equals(this.startPoint)) {
 				this.ctrl.addPoint(coord.getY(), coord.getX(), START);				
 			}
