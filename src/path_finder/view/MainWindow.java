@@ -63,7 +63,7 @@ public class MainWindow extends JFrame{
 		this.maintainWalls = new JCheckBox("Maintain walls");
 		this.diagonals = new JCheckBox("Diagonals");
 		
-		this.delay = new JSpinner(new SpinnerNumberModel(1,0,101,1));
+		this.delay = new JSpinner(new SpinnerNumberModel(1,1,101,1));
 		
 		initializeButtons();
 		
@@ -110,16 +110,20 @@ public class MainWindow extends JFrame{
 				canvas.setDelay((int)delay.getValue());
 				if(diagonals.isSelected()) {
 					try {
+						solve.setEnabled(false);
 						ctrl.start(DIAGONALS);
 					} catch (IOException e1) {
+						solve.setEnabled(true);
 						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",JOptionPane.ERROR_MESSAGE);
 						
 					}					
 				}
 				else {
 					try {
+						solve.setEnabled(false);
 						ctrl.start(NO_DIAGONALS);
 					} catch (IOException e1) {
+						solve.setEnabled(true);
 						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",JOptionPane.ERROR_MESSAGE);
 					}
 				}
@@ -131,6 +135,7 @@ public class MainWindow extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				solve.setEnabled(true);
 				if(maintainWalls.isSelected()) {
 					ctrl.reset(NO_RESET);
 					canvas.reset(NO_RESET);

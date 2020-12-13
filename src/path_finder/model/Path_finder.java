@@ -44,11 +44,15 @@ public class Path_finder {
 	// ------------- MATRIX MANAGEMENT ------------------------------------
 
 	public void addWall(int i, int j) {
-		matrix[i][j] = 1;
+		if(!overwritePoint(i, j, this.startPoint) && !overwritePoint(i, j, this.endPoint)) {
+			matrix[i][j] = 1;			
+		}
 	}
 	
 	public void removeWall(int i, int j) {
-		matrix[i][j] = 0;
+		if(!overwritePoint(i, j, this.startPoint) && !overwritePoint(i, j, this.endPoint)) {
+			matrix[i][j] = 0;			
+		}
 	}	
 	
 	public void addPoint(int i, int j, String point_type) {

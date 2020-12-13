@@ -251,8 +251,10 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 		for(Rectangle r: rectanglesList) {
 			if(r.contains(e.getPoint())) {
 				if(!filledList.contains(r)) {
-					filledList.add(r);
-					updateMatrixModel(r, WALL);
+					if(r != this.startPoint && r != this.endPoint) {
+						filledList.add(r);
+						updateMatrixModel(r, WALL);						
+					}
 				}
 			}
 		}	
@@ -264,8 +266,10 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 		for(Rectangle r: rectanglesList) {
 			if(r.contains(e.getPoint())) {
 				if(filledList.contains(r)) {
-					filledList.remove(r);
-					updateMatrixModel(r, BLANK);
+					if(r != this.startPoint && r != this.endPoint) {
+						filledList.remove(r);
+						updateMatrixModel(r, BLANK);						
+					}
 				}
 			}
 		}	
@@ -278,14 +282,18 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 			if(r.contains(e.getPoint())) {
 				if(paintMode) {
 					if(!filledList.contains(r)) {
-						filledList.add(r);	
-						updateMatrixModel(r, WALL);
+						if(r != this.startPoint && r != this.endPoint) {
+							filledList.add(r);	
+							updateMatrixModel(r, WALL);							
+						}
 					}
 				}
 				else if(removeMode) {
 					if(filledList.contains(r)) {
-						filledList.remove(r);
-						updateMatrixModel(r, BLANK);
+						if(r != this.startPoint && r != this.endPoint) {
+							filledList.remove(r);
+							updateMatrixModel(r, BLANK);							
+						}
 					}
 				}
 				repaint();

@@ -44,7 +44,7 @@ public class HelpDialog extends JDialog{
 		
 		info = "Controls" + "\n" + "\n" + "Right click: paint wall" + "\n" + "Left click: remove wall" + "\n" +
 				"S + right click: setup start point" + "\n" +  "E + right click: setup end point" + "\n" + 
-				"Delay supported values: numbers between 0 and 100" + "\n";
+				"Delay supported values: numbers between 1 and 100" + "\n";
 		
 		return info;
 	}
