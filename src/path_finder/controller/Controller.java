@@ -1,5 +1,7 @@
 package path_finder.controller;
 
+import java.io.IOException;
+
 import path_finder.model.Path_finder;
 import path_finder.model.canvasObserver;
 
@@ -23,7 +25,7 @@ public class Controller {
 		this.pathfinder.addPoint(i, j, point_type);
 	}
 	
-	public void start(int d) {
+	public void start(int d) throws IOException {
 		this.pathfinder.start(d);
 	}
 	

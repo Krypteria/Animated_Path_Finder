@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -14,7 +15,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
 import path_finder.controller.Controller;
@@ -25,6 +29,7 @@ import path_finder.model.canvasObserver;
 @SuppressWarnings("serial")
 public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 
+	//CONSTRAINTS
 	private static final int lineThickness = 20;
 	private static final int height = 40;
 	private static final int width = 40;
@@ -36,39 +41,47 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 	private static final String START = "StartPoint";
 	private static final String END = "EndPoint";
 	
-	private Controller ctrl;
-	
+	//PAINTCOMPONENT LISTS  used to paint in the JPanel
 	private List<Rectangle> rectanglesList;
 	private List<Rectangle> filledList;
 	private List<Rectangle> visitedPattern;
 	private List<Rectangle> solutionPath;
 	
+	//OBSERVER LISTS  used to pass data between model and view
 	private List<tCoord> visitedNodes;
 	private List<tCoord> solutionNodes;
 	
+	//COMPROBATION MAPS  used to check the position of a rectangle in the matrix model
 	private HashMap<Rectangle, tCoord> mapCoord;
 	private HashMap<Integer, HashMap<Integer,Rectangle>> mapRect;
+	
+	
+	private Controller ctrl;
 	
 	private Rectangle startPoint;
 	private Rectangle endPoint;
 	
-	private int count;
 	
+	//SOLUTION CONTROL BOOLEAN  used to tell the paintcomponent method that he should paint the minimum path
 	private boolean paintSolution;
 	
 	private Timer timer;
 	
-	//used for peek
+	//AUXILIAR RECTANGLE  used in the visited pattern animations (peek)
 	private Rectangle last = null;
 	
-	//mode control
+	//MOUSE MODE CONTROL BOOLEANS
 	private boolean paintMode, removeMode;
 	
-	//solution painting
-	
+	//ANIMATION VARIABLES
 	private int delay;
 	private int solutionGraphicCount = 0;
 	
+	//KEYBOARD LISTENER CONTROL BOOLEANS
+	private boolean S_key;
+	private boolean E_key;
+	
+	//COLOR MANAGEMENT
 	private final Color lineColor = Color.black;
 	private final Color wall = Color.black;
 	private final float[] start = Color.RGBtoHSB(103, 45, 105, null);
@@ -93,11 +106,14 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 		this.mapCoord = new HashMap<Rectangle, tCoord>();
 		this.mapRect = new HashMap<Integer, HashMap<Integer, Rectangle>>();
 		this.paintSolution = false;
+		this.S_key = false;
+		this.E_key = false;
 		this.startPoint = null;
 		this.endPoint = null;
-		this.count = 0;
 
+		this.setFocusable(true);
 		addMouseListener();
+		addKeyEventListener();
 		
 		for(int i = 0; i < height; i++) {
 			HashMap<Integer, Rectangle> aux = new HashMap<Integer, Rectangle>();
@@ -155,6 +171,81 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 		}
 	}
 	
+	
+	// ------------- MOUSE/KEYBOARD LISTENERS CREATIONS -------------
+	
+	private void addMouseListener() {
+		this.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getButton() == MouseEvent.BUTTON1 && !S_key && !E_key) {
+					drawMode(e);
+				}
+				else if(e.getButton() == MouseEvent.BUTTON1 && S_key) {
+					setStartPoint(e);
+				}
+				else if(e.getButton() == MouseEvent.BUTTON1 && E_key) {
+					setEndPoint(e);
+				}
+				else if(e.getButton() == MouseEvent.BUTTON3) {
+					removeMode(e);
+				}
+			}
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				releasedAction(e);
+			}
+		});
+		
+		this.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				dragAction(e);
+			}
+		});
+	}
+	
+	private void addKeyEventListener() {
+		
+		this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0, false), "S_PRESS");
+		this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0, true), "S_RELEASE");
+		
+		this.getActionMap().put("S_PRESS", new AbstractAction(){
+	        @Override
+	        public void actionPerformed(ActionEvent e){
+	            S_key = true;
+	        }
+	    });
+		
+		this.getActionMap().put("S_RELEASE", new AbstractAction(){
+	        @Override
+	        public void actionPerformed(ActionEvent e){
+	        	S_key = false;
+	        }
+	    });
+		
+		this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_E, 0, false), "E_PRESS");
+		this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_E, 0, true), "E_RELEASE");
+		
+		this.getActionMap().put("E_PRESS", new AbstractAction(){
+	        @Override
+	        public void actionPerformed(ActionEvent e){
+	            E_key = true;
+	        }
+	    });
+		
+		this.getActionMap().put("E_RELEASE", new AbstractAction(){
+	        @Override
+	        public void actionPerformed(ActionEvent e){
+	        	E_key = false;
+	        }
+	    });
+	}
+	
+	
+	// ------------- MOUSE ACTIONS / KEYBOARD ACTIONS ---------------
+	
 	private void drawMode(MouseEvent e) {
 		for(Rectangle r: rectanglesList) {
 			if(r.contains(e.getPoint())) {
@@ -181,7 +272,7 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 		repaint();
 	}
 	
-	private void dragComprobation(MouseEvent e) {
+	private void dragAction(MouseEvent e) {
 		for(Rectangle r: rectanglesList) {
 			if(r.contains(e.getPoint())) {
 				if(paintMode) {
@@ -201,88 +292,44 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 		}	
 	}
 	
-	private void releasedComprobation(MouseEvent e) {
+	private void releasedAction(MouseEvent e) {
 		paintMode = false;
 		removeMode = false;
 	}
 	
-	private void setPointsMode(MouseEvent e) {
+	private void setStartPoint(MouseEvent e) {
 		for(Rectangle r: rectanglesList) {
 			if(r.contains(e.getPoint())) {
 				if(!filledList.contains(r)) {
-					if(count % 2 == 0) {
-						this.startPoint = r;
-					}
-					else {
-						this.endPoint = r;
-					}
-					count = (count + 1) % 2;
+					this.startPoint = r;
 					updateMatrixModel(r, IMPORTANT_POINT);
 				}
 				else {
 					System.out.println("No puedes poner el punto en un muro");
 				}
 			}
-		}	
+		}
 		repaint();
 	}
 	
-	private void updateMatrixModel(Rectangle r, int mode) {
-		
-		tCoord coord = mapCoord.get(r);
-		
-		if(mode == BLANK) {
-			this.ctrl.removeWall(coord.getY(), coord.getX());						
+	private void setEndPoint(MouseEvent e) {
+		for(Rectangle r: rectanglesList) {
+			if(r.contains(e.getPoint())) {
+				if(!filledList.contains(r)) {
+					this.endPoint = r;
+					updateMatrixModel(r, IMPORTANT_POINT);
+				}
+				else {
+					System.out.println("No puedes poner el punto en un muro");
+				}
+			}
 		}
-		else if(mode == WALL) {
-			this.ctrl.addWall(coord.getY(), coord.getX());						
-		}
-		else if(mode == IMPORTANT_POINT)
-			if(r.equals(this.startPoint)) {
-				this.ctrl.addPoint(coord.getY(), coord.getX(), START);				
-			}
-			else {
-				this.ctrl.addPoint(coord.getY(), coord.getX(), END);
-			}	
+		repaint();
 	}
 	
-	@Override
-	public void updateSolution(List<tCoord> visitedNodes, List<tCoord> solutionPath) { 
-		this.visitedNodes = visitedNodes;
-		this.solutionNodes = solutionPath;
-		this.timer = new Timer(this.delay, this);
-		this.timer.start();
-	}
 	
-	private void addMouseListener() {
-		this.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(e.getButton() == MouseEvent.BUTTON1) {
-					drawMode(e);
-				}
-				else if(e.getButton() == MouseEvent.BUTTON2) {
-					setPointsMode(e);
-				}
-				else if(e.getButton() == MouseEvent.BUTTON3) {
-					removeMode(e);
-				}
-			}
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				releasedComprobation(e);
-			}
-		});
-		
-		this.addMouseMotionListener(new MouseMotionAdapter() {
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				dragComprobation(e);
-			}
-		});
-	}
-	
+	// ------------- TIMER MANAGEMENT -------------------------------
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -319,9 +366,43 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 		}
 	}
 	
+	
+	// ------------- OBSERVER METHODS -------------------------------
+	
+	@Override
+	public void updateSolution(List<tCoord> visitedNodes, List<tCoord> solutionPath) { 
+		this.visitedNodes = visitedNodes;
+		this.solutionNodes = solutionPath;
+		this.timer = new Timer(this.delay, this);
+		this.timer.start();
+	}
+	
+	// --------------------------------------------------------------
+	
+	private void updateMatrixModel(Rectangle r, int mode) {
+		
+		tCoord coord = mapCoord.get(r);
+		
+		if(mode == BLANK) {
+			this.ctrl.removeWall(coord.getY(), coord.getX());						
+		}
+		else if(mode == WALL) {
+			this.ctrl.addWall(coord.getY(), coord.getX());						
+		}
+		else if(mode == IMPORTANT_POINT)
+			if(r.equals(this.startPoint)) {
+				this.ctrl.addPoint(coord.getY(), coord.getX(), START);				
+			}
+			else {
+				this.ctrl.addPoint(coord.getY(), coord.getX(), END);
+			}	
+	}
+
 	public void reset(int w) {
 		if(w != 0) 
 			this.filledList.clear();	
+		if(this.timer != null)
+			this.timer.stop();
 		
 		this.visitedPattern.clear();
 		this.visitedNodes.clear();
@@ -330,8 +411,6 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 		this.last = null;
 		this.solutionGraphicCount = 0;
 		this.paintSolution = false;
-		if(this.timer != null)
-			this.timer.stop();
 		
 		repaint();
 	}
