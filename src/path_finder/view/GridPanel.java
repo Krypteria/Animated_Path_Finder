@@ -1,10 +1,12 @@
 package path_finder.view;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -31,7 +33,7 @@ import path_finder.model.canvasObserver;
 public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 
 	//CONSTRAINTS
-	private static final int lineThickness = 20;
+	private int lineThickness = 20;
 	private static final int height = 40;
 	private static final int width = 40;
 	
@@ -113,8 +115,15 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 		this.endPoint = null;
 
 		this.setFocusable(true);
+		
 		addMouseListener();
 		addKeyEventListener();
+		
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		while(screenSize.getHeight() < lineThickness * GridPanel.height + 150 || screenSize.getWidth() < lineThickness * GridPanel.width + 150) {
+			lineThickness--;
+		}
 		
 		for(int i = 0; i < height; i++) {
 			HashMap<Integer, Rectangle> aux = new HashMap<Integer, Rectangle>();
@@ -128,6 +137,8 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 				mapRect.put(i, aux);
 			}
 		}
+		
+		this.setPreferredSize(new Dimension(lineThickness * GridPanel.height, lineThickness * GridPanel.width));
 	}
 	
 	@Override
@@ -428,5 +439,13 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 	
 	public void setDelay(int delay) {
 		this.delay = delay;
+	}
+	
+	public int getScreenHeight() {
+		return this.lineThickness * GridPanel.height + 47;
+	}
+	
+	public int getScreenWidth() {
+		return this.lineThickness * GridPanel.width + 96;
 	}
 }

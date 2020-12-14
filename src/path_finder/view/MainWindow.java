@@ -32,9 +32,6 @@ public class MainWindow extends JFrame{
 	private static final int DIAGONALS = 1;
 	private static final int NO_DIAGONALS = 0;
 	
-	private static final int frameHeight = 850;
-	private static final int frameWidth = 900;
-	
 	private Controller ctrl;
 	private GridPanel canvas;
 	
@@ -96,7 +93,7 @@ public class MainWindow extends JFrame{
 		this.setTitle("Path Finder");
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(new Dimension(frameHeight, frameWidth));
+		this.setSize(new Dimension(this.canvas.getScreenHeight(), this.canvas.getScreenWidth()));
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 	}
@@ -167,6 +164,11 @@ public class MainWindow extends JFrame{
 		JPanel p2 = new JPanel();
 		JPanel p3 = new JPanel();
 		
+		p1.setMaximumSize(new Dimension(5,5));
+		p2.setMaximumSize(new Dimension(5,5));
+		p3.setMaximumSize(new Dimension(5,5));
+		
+
 		this.add(p1, BorderLayout.PAGE_START);
 		this.add(p2, BorderLayout.LINE_START);
 		this.add(p3, BorderLayout.LINE_END);
