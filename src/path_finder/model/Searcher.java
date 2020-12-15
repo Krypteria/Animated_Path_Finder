@@ -39,18 +39,19 @@ public class Searcher {
 	//BFS specific parameters
 	private Queue<tCoord> q;
 	
-	//Dijkstra specific parameters
-	private Queue<Pair<Integer, tCoord>> q2;
-	private static final int LIMIT = 100000000;
-	private static final int COSTE = 1;
-
+	//A* specific parameters
+	private Queue<Pair<Double, tCoord>> q2;
 	
-	public void addValues(tCoord s, tCoord e, int [][] m, int h, int w, int d) {
-		this.startPoint = s;
-		this.endPoint = e;
+	
+	public Searcher(int [][] m, int h, int w) {
 		this.matrix = m;
 		this.height = h;
 		this.width = w;
+	}
+	
+	public void addValues(tCoord s, tCoord e, int d) {
+		this.startPoint = s;
+		this.endPoint = e;
 		if(d == 1) {
 			this.nNodes = 8;
 		}
@@ -68,7 +69,7 @@ public class Searcher {
 	void bfs(){ 
 		
 		initializeBfsParameters();
-		initializeBfsMatrixs();		
+		initializeMatrixs();		
 		
 		dist[this.startPoint.getX()][this.startPoint.getY()] = 0;
 		visited[this.startPoint.getX()][this.startPoint.getY()] = true;
@@ -107,15 +108,6 @@ public class Searcher {
 		setupObserverUpdate();
 	}
 	
-	private void initializeBfsMatrixs() {
-		for(int i = 0; i < this.height; i++) {
-			for(int j = 0; j < this.width; j++){
-				this.dist[i][j] = 0;
-				this.visited[i][j] = false;
-			}
-		}
-	}
-	
 	private void initializeBfsParameters() {
 		this.dist = new int [height][width];
 		this.visited = new boolean [height][width];
@@ -125,69 +117,93 @@ public class Searcher {
 		this.founded = false;
 	}
 	
-	// ------------------------ DIJKSTRA ----------------------------------------------------------------
+	// ------------------------ A*  ------------------------------------------------------------
 	
-	/*void Dijkstra() {
+	void A_Star() {
 		
-		initializeDijkstraMatrixs();
-		initializeDijkstraParameters();
+		initializeA_StarParameters();
+		initializeMatrixs();
 		
-		q2.add(new Pair<Integer, tCoord>(0, this.startPoint));
+		this.dist[this.startPoint.getX()][this.startPoint.getY()] = 0;
+		this.visited[this.startPoint.getX()][this.startPoint.getY()] = true;
+		q2.add(new Pair<Double, tCoord>(setF(this.startPoint), this.startPoint)); //pair<F, tCoord>
+		
 		
 		while(!q2.isEmpty() && !founded) {
-			Pair<Integer, tCoord> front = q2.peek();  q2.poll();
+			Pair<Double, tCoord> front = q2.peek();  q2.poll();
 			
 			if(front.getSecond() != this.startPoint) {
 				this.visitedNodes.add(front.getSecond());
 			}
 			
-			tCoord nodo = front.getSecond();  int coste = front.getFirst();
+			tCoord nodo = front.getSecond(); 
 			
-			if(coste > dist[nodo.getX()][nodo.getY()]) {
-				continue;
-			}
-			
-			for(int i = 0; i < 8; i++) {
+			for(int i = 0; i < this.nNodes; i++) {
+				
 				int nX = nodo.getX() + dF[i];
 				int nY = nodo.getY() + dC[i];
 				
 				if(isOk(nX, nY) && !visited[nX][nY] && matrix[nX][nY] != 1) {
 					
-					if(dist[nodo.getX()][nodo.getY()] + COSTE < dist[nX][nY]) {
-						dist[nX][nY] = dist[nodo.getX()][nodo.getY()] + COSTE;
-						q2.add(new Pair<Integer, tCoord>(dist[nX][nY], new tCoord(nX, nY)));
-						visited[nX][nY] = true;
-						this.trackNodes[nX][nY] = nodo;
-						
-						if(this.endPoint.getX() == nX && this.endPoint.getY() == nY) {
-							this.founded = true;
-							break;
-						}
+					dist[nX][nY] = dist[nodo.getX()][nodo.getY()] + 1;
+					visited[nX][nY] = true;
+					this.trackNodes[nX][nY] = nodo;
+					
+					if(this.endPoint.getX() == nX && this.endPoint.getY() == nY) {
+						this.founded = true;
+						break;
 					}
+					
+					q2.add(new Pair<Double, tCoord>(setF(new tCoord(nX, nY)), new tCoord(nX, nY)));
 				}
 			}
 		}
-	
+		
 		setupObserverUpdate();
 	}
 	
-	private void initializeDijkstraMatrixs() {
+	private void initializeA_StarParameters() {
+		this.dist = new int [height][width];
+		this.visited = new boolean [height][width];
+		this.visitedNodes = new ArrayList<tCoord>();
+		this.trackNodes = new tCoord [height][width];
+		this.q2 = new PriorityQueue<Pair<Double, tCoord>>();
+		this.founded = false;
+	}
+	
+	// --------------- HEURISTIC ---------------------------------------------------------------------
+	
+	private double setF(tCoord p) {
+		return dist[p.getX()][p.getY()] + getHeuristic(p);
+	}
+	
+	private double getHeuristic(tCoord p) {
+		if(this.nNodes == 8) {
+			return this.EuclideanHeuristic(p);
+		}
+		else {
+			return this.ManhattanHeuristic(p);
+		}
+	}
+	private double EuclideanHeuristic(tCoord p) {
+		return Math.pow((p.getX() - this.endPoint.getX()),2) + Math.pow((p.getY() - this.endPoint.getY()), 2);
+	}
+	
+	private double ManhattanHeuristic(tCoord p) {
+		return Math.abs(p.getX() - this.endPoint.getX()) + Math.abs(p.getY() - this.endPoint.getY());
+	}
+	
+	// -------------------------------------------------------------------------------------------------
+	
+	private void initializeMatrixs() {
 		for(int i = 0; i < this.height; i++) {
 			for(int j = 0; j < this.width; j++){
-				this.dist[i][j] = LIMIT;
+				this.dist[i][j] = 0;
 				this.visited[i][j] = false;
 			}
 		}
 	}
 	
-	private void initializeDijkstraParameters() {
-		this.dist[this.startPoint.getX()][this.startPoint.getY()] = 0;
-		this.visited[this.startPoint.getX()][this.startPoint.getY()] = true;
-		this.q2 = new PriorityQueue<Pair<Integer, tCoord>>();
-	}
-	*/
-	// -------------------------------------------------------------------------------------------------
-
 	private void setupObserverUpdate() {
 		this.solutionPath = new ArrayList<tCoord>();
 		obtainSolutionPath(solutionPath, trackNodes[this.endPoint.getX()][this.endPoint.getY()], trackNodes);
@@ -205,9 +221,8 @@ public class Searcher {
 		return (0 <= nX && nX < this.height && 0 <= nY && nY < this.width);
 	}
 
-	public void reset() {
-		initializeBfsMatrixs();
-		//initializeDijkstraMatrixs();
+	public void reset() { 
+		initializeMatrixs();
 		if(this.visitedNodes != null)
 			this.visitedNodes.clear();
 		if(this.solutionPath != null)

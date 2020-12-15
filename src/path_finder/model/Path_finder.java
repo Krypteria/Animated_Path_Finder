@@ -24,7 +24,7 @@ public class Path_finder {
 		this.matrix = new int[height][width];
 		this.startPoint = new tCoord(-1, -1);
 		this.endPoint = new tCoord(-1, -1);;
-		this.search = new Searcher();
+		this.search = new Searcher(this.matrix, Path_finder.height, Path_finder.width);
 		initializeMatrix();
 	}
 	
@@ -83,9 +83,9 @@ public class Path_finder {
 	
 	// ------------- SEARCHER CALLS ---------------------------------------
 	
-	public void start(int d) throws IOException {
+	public void bfsSolve(int d) throws IOException {
 		if(this.startPoint.getX() != -1 && this.endPoint.getX() != -1) {
-			search.addValues(this.startPoint, this.endPoint, this.matrix, Path_finder.height, Path_finder.width, d);
+			search.addValues(this.startPoint, this.endPoint, d);
 			search.bfs();			
 		}
 		else {
@@ -93,15 +93,15 @@ public class Path_finder {
 		}
 	}
 	
-	/*public void start2() {
+	public void a_starSolve(int d) throws IOException {
 		if(this.startPoint.getX() != -1 && this.endPoint.getX() != -1) {
-			search.addValues(this.startPoint, this.endPoint, this.matrix, Path_finder.height, Path_finder.width);
-			//search.Dijkstra();			
+			search.addValues(this.startPoint, this.endPoint, d);
+			search.A_Star();			
 		}
 		else {
-			System.out.println("Define los puntos de comienzo y final");
+			throw new IOException("setup the start and end points");
 		}
-	}*/
+	}
 	
 	public void reset(int w) {
 		if(w == 1) { 

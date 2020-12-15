@@ -35,7 +35,8 @@ public class MainWindow extends JFrame{
 	private Controller ctrl;
 	private GridPanel canvas;
 	
-	private JButton solve;
+	private JButton bfsSolve;
+	private JButton a_starSolve;
 	private JButton reset;
 	private JButton help;
 	
@@ -75,7 +76,8 @@ public class MainWindow extends JFrame{
 		JPanel optionPanel = new JPanel();
 		optionPanel.setLayout(new FlowLayout());
 		
-		optionPanel.add(this.solve);
+		optionPanel.add(this.bfsSolve);
+		optionPanel.add(this.a_starSolve);
 		optionPanel.add(this.diagonals);
 		optionPanel.add(Box.createRigidArea(new Dimension(5,5)));
 		optionPanel.add(this.delayLabel);
@@ -99,28 +101,56 @@ public class MainWindow extends JFrame{
 	}
 	
 	private void initializeButtons() {
-		this.solve = new JButton("Start");
-		solve.addActionListener(new ActionListener() {
+		this.bfsSolve = new JButton("BFS");
+		bfsSolve.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				canvas.setDelay((int)delay.getValue());
 				if(diagonals.isSelected()) {
 					try {
-						solve.setEnabled(false);
-						ctrl.start(DIAGONALS);
+						bfsSolve.setEnabled(false);
+						ctrl.bfsSolve(DIAGONALS);
 					} catch (IOException e1) {
-						solve.setEnabled(true);
+						bfsSolve.setEnabled(true);
 						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",JOptionPane.ERROR_MESSAGE);
 						
 					}					
 				}
 				else {
 					try {
-						solve.setEnabled(false);
-						ctrl.start(NO_DIAGONALS);
+						bfsSolve.setEnabled(false);
+						ctrl.bfsSolve(NO_DIAGONALS);
 					} catch (IOException e1) {
-						solve.setEnabled(true);
+						bfsSolve.setEnabled(true);
+						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+		
+		this.a_starSolve = new JButton("A*");
+		a_starSolve.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				canvas.setDelay((int)delay.getValue());
+				if(diagonals.isSelected()) {
+					try {
+						a_starSolve.setEnabled(false);
+						ctrl.a_starSolve(DIAGONALS);
+					} catch (IOException e1) {
+						bfsSolve.setEnabled(true);
+						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",JOptionPane.ERROR_MESSAGE);
+						
+					}					
+				}
+				else {
+					try {
+						a_starSolve.setEnabled(false);
+						ctrl.a_starSolve(NO_DIAGONALS);
+					} catch (IOException e1) {
+						bfsSolve.setEnabled(true);
 						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",JOptionPane.ERROR_MESSAGE);
 					}
 				}
@@ -132,7 +162,7 @@ public class MainWindow extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				solve.setEnabled(true);
+				bfsSolve.setEnabled(true);
 				if(maintainWalls.isSelected()) {
 					ctrl.reset(NO_RESET);
 					canvas.reset(NO_RESET);

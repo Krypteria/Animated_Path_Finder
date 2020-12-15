@@ -1,16 +1,16 @@
 package path_finder.misc;
 
-public class Pair<T1, T2> implements Comparable<Pair<Integer, T2>>{
+public class Pair<T1, T2> implements Comparable<Pair<Double, T2>>{
 
-	private Integer first;
+	private Double first;
 	private T2 second;
 	
-	public Pair(Integer f, T2 s) {
+	public Pair(Double f, T2 s) {
 		this.first = f;
 		this.second = s;
 	}
 	
-	public Integer getFirst() {
+	public Double getFirst() {
 		return this.first;
 	}
 	
@@ -19,7 +19,7 @@ public class Pair<T1, T2> implements Comparable<Pair<Integer, T2>>{
 	}
 	
 	@Override
-	public int compareTo(Pair<Integer,T2> p) { 
+	public int compareTo(Pair<Double,T2> p) { 
 		if(this.first == p.getFirst()) {
 			return 0;
 		}

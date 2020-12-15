@@ -25,12 +25,12 @@ public class Controller {
 		this.pathfinder.addPoint(i, j, point_type);
 	}
 	
-	public void start(int d) throws IOException {
-		this.pathfinder.start(d);
+	public void bfsSolve(int d) throws IOException {
+		this.pathfinder.bfsSolve(d);
 	}
 	
-	public void start2() {
-		//this.pathfinder.start2();
+	public void a_starSolve(int d) throws IOException {
+		this.pathfinder.a_starSolve(d);
 	}
 	
 	public void reset(int w) {
