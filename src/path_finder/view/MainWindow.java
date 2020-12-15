@@ -109,20 +109,20 @@ public class MainWindow extends JFrame{
 				canvas.setDelay((int)delay.getValue());
 				if(diagonals.isSelected()) {
 					try {
-						bfsSolve.setEnabled(false);
+						setButtonsEnable(false);
 						ctrl.bfsSolve(DIAGONALS);
 					} catch (IOException e1) {
-						bfsSolve.setEnabled(true);
+						setButtonsEnable(true);
 						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",JOptionPane.ERROR_MESSAGE);
 						
 					}					
 				}
 				else {
 					try {
-						bfsSolve.setEnabled(false);
+						setButtonsEnable(false);
 						ctrl.bfsSolve(NO_DIAGONALS);
 					} catch (IOException e1) {
-						bfsSolve.setEnabled(true);
+						setButtonsEnable(true);
 						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",JOptionPane.ERROR_MESSAGE);
 					}
 				}
@@ -137,20 +137,20 @@ public class MainWindow extends JFrame{
 				canvas.setDelay((int)delay.getValue());
 				if(diagonals.isSelected()) {
 					try {
-						a_starSolve.setEnabled(false);
+						setButtonsEnable(false);
 						ctrl.a_starSolve(DIAGONALS);
 					} catch (IOException e1) {
-						bfsSolve.setEnabled(true);
+						setButtonsEnable(true);
 						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",JOptionPane.ERROR_MESSAGE);
 						
 					}					
 				}
 				else {
 					try {
-						a_starSolve.setEnabled(false);
+						setButtonsEnable(false);
 						ctrl.a_starSolve(NO_DIAGONALS);
 					} catch (IOException e1) {
-						bfsSolve.setEnabled(true);
+						setButtonsEnable(true);
 						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",JOptionPane.ERROR_MESSAGE);
 					}
 				}
@@ -162,7 +162,7 @@ public class MainWindow extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				bfsSolve.setEnabled(true);
+				setButtonsEnable(true);
 				if(maintainWalls.isSelected()) {
 					ctrl.reset(NO_RESET);
 					canvas.reset(NO_RESET);
@@ -186,6 +186,11 @@ public class MainWindow extends JFrame{
 			}
 			
 		});
+	}
+	
+	private void setButtonsEnable(boolean mode) {
+		this.a_starSolve.setEnabled(mode);
+		this.bfsSolve.setEnabled(mode);
 	}
 	
 	//Auxiliar rudimentary method to add space in the sides of the GridPanel
