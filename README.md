@@ -33,17 +33,17 @@ BFS es un algoritmo de búsqueda en anchura que se utiliza en grafos no valorado
  
  ![muros](https://user-images.githubusercontent.com/55555187/102259205-18ea4e00-3f0f-11eb-949b-ccdca699e1df.gif)
 
- (click derecho)
+ *(click derecho)*
  #### Borrar muros
  
  ![borrar](https://user-images.githubusercontent.com/55555187/102259209-1ab41180-3f0f-11eb-8568-fd95773d7575.gif)
 
- (click izquierdo)
+ *(click izquierdo)*
  #### Desplazar los puntos de comienzo y final 
 
 ![puntos](https://user-images.githubusercontent.com/55555187/102259214-1be53e80-3f0f-11eb-9401-07fb9fcb34ed.gif)
 
- (punto de comienzo -> S + click izquierdo   punto de final -> E + click izquierdo)
+ *(punto de comienzo -> S + click izquierdo   punto de final -> E + click izquierdo)*
 
 #### Animación de la solución
  En el panel se muestra una animación que permite visualizar el funcionamiento del algoritmo que se halla elegido para realizar la búsqueda, la animación consta de 2 fases:
