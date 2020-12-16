@@ -3,22 +3,25 @@
 ![intro](https://user-images.githubusercontent.com/55555187/102256573-d70bd880-3f0b-11eb-829d-8b48b4b3f91d.gif)
 
 ## Como descargarlo y ejecutarlo
+1. Descargar Animated_path_finder.jar de la carpeta launcher del repositorio.
+2. Guardar Animated_path_finder.jar donde queramos.
+3. Abrir la terminal (Linux, Mac) o CMD (Windows)
+4. ir al directorio donde está guardado Animated_path_finder.jar
+5. Ejecutar java -jar Animated_path_finder.jar
 
+(En windows también puede ejecutarse haciendo doble click sobre Animated_path_finder.jar)
 
 ## ¿Que es el pathfinding?
-
 El pathfinding es una técnica cuyo objetivo es encontrar un camino de un punto a otro lo más rápida y eficientemente posible.
 En esta aplicación se han empleado dos algoritmos de pathfinding con el fin de realizar una comparativa visual entre ellos.
 
 ### A*
-
 A* es uno de los algoritmos de búsqueda más usados en la actualidad, se trata de un algoritmo voraz que utiliza heurística para mejorar la eficiencia de la búsqueda.
 En este caso se emplean 2 heurísticas diferentes dependiendo de las restricciones de movimiento (se le ofrece al usuario la posibilidad de deshabilitar las diagonales).
 
 ![gif A intro](https://user-images.githubusercontent.com/55555187/102255212-0cafc200-3f0a-11eb-9d64-72d70b1f030f.gif)
 
 ### BFS
-
 BFS es un algoritmo de búsqueda en anchura que se utiliza en grafos no valorados para hallar el camino mínimo entre dos puntos.
 
 ![gif BFS intro](https://user-images.githubusercontent.com/55555187/102255239-1507fd00-3f0a-11eb-830e-60726ea09cdb.gif)
