@@ -425,11 +425,15 @@ public class GridPanel extends JPanel implements canvasObserver, ActionListener{
 			this.filledList.clear();	
 		if(this.timer != null)
 			this.timer.stop();
+		if(this.visitedPattern != null)
+			this.visitedPattern.clear();
+		if(this.visitedNodes != null)
+			this.visitedNodes.clear();
+		if(this.solutionPath != null)
+			this.solutionPath.clear();
+		if(this.solutionNodes != null)
+			this.solutionNodes.clear();
 		
-		this.visitedPattern.clear();
-		this.visitedNodes.clear();
-		this.solutionPath.clear();
-		this.solutionNodes.clear();
 		this.last = null;
 		this.solutionGraphicCount = 0;
 		this.paintSolution = false;

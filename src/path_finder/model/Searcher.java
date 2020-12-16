@@ -222,7 +222,9 @@ public class Searcher {
 	}
 
 	public void reset() { 
-		initializeMatrixs();
+		
+		if(this.dist != null && this.visited != null)
+			initializeMatrixs();
 		if(this.visitedNodes != null)
 			this.visitedNodes.clear();
 		if(this.solutionPath != null)
